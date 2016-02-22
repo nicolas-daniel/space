@@ -1,6 +1,8 @@
 import Meteorites from './modules/meteorites';
 import Planet from './modules/planet';
 import Lune from './modules/lune';
+import SoundManager from './managers/soundManager';
+import GuiManager from './managers/guiManager';
 
 WAGNER.vertexShadersPath = '/shaders/vertex-shaders';
 WAGNER.fragmentShadersPath = '/shaders/fragment-shaders';
@@ -18,6 +20,10 @@ class App {
 		this.bgColor = 0x1a1a1a;
 		this.wWidth = window.innerWidth;
 		this.wHeight = window.innerHeight;
+		this.useNoise = true;
+		this.useVignette = true;
+		this.autoRotate = true;
+		this.gui = window.gui = new dat.GUI();
 
 		// wagner passes
 		this.zoomBlurPass = new WAGNER.ZoomBlurPass();
@@ -39,6 +45,14 @@ class App {
 		this.vignette2Pass.params.boost = 2;
 		this.vignette2Pass.params.reduction = 4;
 		
+		this.guiManager = new GuiManager();
+
+		// init gui
+		this.wagnerGui = this.gui.addFolder('Wagner');
+		this.wagnerGui.add(this, 'useNoise');
+		this.wagnerGui.add(this, 'useVignette');
+		this.wagnerGui.open();
+
 		this.init();
 		
 		window.addEventListener('resize', this.resize, true);
@@ -50,12 +64,12 @@ class App {
 		this.scene = new THREE.Scene();
 		// this.scene.fog = new THREE.Fog( this.bgColor, 0.1, 1000 );
 
-		this.renderer = new THREE.WebGLRenderer({ antialias:false, alpha:true });
+		this.renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
 		this.renderer.setClearColor(this.bgColor, 1);
 		this.renderer.autoClearColor = true;
 		
 		this.camera = new THREE.PerspectiveCamera(45, this.wWidth/this.wHeight, 1, 2000);
-		this.camera.position.z = 600;
+		this.camera.position.z = 700;
 
 		this.renderer.setSize(this.wWidth, this.wHeight);
 
@@ -72,15 +86,20 @@ class App {
 
 		this.addControls();
 		
-		this.meteorites = new Meteorites( this.scene );
-		this.planet = new Planet( this.scene );
-		this.lune = new Lune( this.scene );
+		this.meteorites = new Meteorites({ count:100 });
+		this.planet = new Planet({ radius:100 });
+		this.lune = new Lune({ radius:20 });
 
 		this.scene.add( this.meteorites );
 		this.scene.add( this.planet );
 		this.scene.add( this.lune );
 
+		// add sound manager
+		this.soundManager = new SoundManager();
+		
 		this.update();
+		
+		this.gui.add(this, 'autoRotate');
 
 	}
 
@@ -98,8 +117,9 @@ class App {
 	addControls() {
 
 		this.controls = new THREE.TrackballControls( this.camera );
-		this.controls.maxDistance = 1000;
-		this.controls.minDistance = 100;
+		this.controls.noZoom = true;
+		this.controls.noPan = true;
+		this.controls.noRoll = true;
 		this.controls.dynamicDampingFactor = .15;
 		this.controls.addEventListener('change', this.animate);
 
@@ -119,8 +139,8 @@ class App {
 
 		this.composer.reset();
 		this.composer.render( this.scene, this.camera );
-		this.composer.pass( this.noisePass );
-		this.composer.pass( this.vignettePass );
+		if (this.useNoise) this.composer.pass( this.noisePass );
+		if (this.useVignette) this.composer.pass( this.vignettePass );
 		
 		// this.composer.pass( this.multiPassBloomPass );
 		// this.composer.pass( this.vignette2Pass );
@@ -129,10 +149,13 @@ class App {
 		
 		this.composer.toScreen();
 		
-		this.scene.rotation.x += 0.002;
-		this.scene.rotation.y += 0.002;
-		this.scene.rotation.z += 0.002;
+		if (this.autoRotate) {
+			this.scene.rotation.x += 0.002;
+			this.scene.rotation.y += 0.002;
+			this.scene.rotation.z += 0.002;
+		}
 
+		this.soundManager.update();
 		this.planet.update();
 		this.meteorites.update();
 		this.lune.update();
@@ -153,4 +176,4 @@ class App {
 
 }
 
-let app = new App();
+window.app = new App();

@@ -1,6 +1,6 @@
 class Meteorites extends THREE.Object3D {
 
-	constructor () {
+	constructor ( opt ) {
 
 		super();
 
@@ -21,7 +21,7 @@ class Meteorites extends THREE.Object3D {
 
 		// meshes
 		let pos, scale, radius;
-		for (let i=0; i<100; ++i) {
+		for (let i=0; i<opt.count; ++i) {
 			radius = Math.floor(Math.random() * 400) + 800;
 			pos = this.getPoint(0,0,0,radius);
 			scale = Math.random() * 2 + 1;
@@ -64,6 +64,12 @@ class Meteorites extends THREE.Object3D {
 			this.meteorites[i].rotation.x += 0.006;
 			this.meteorites[i].rotation.y += 0.006;
 			this.meteorites[i].rotation.z += 0.006;
+
+			if (window.app) {
+				this.meteorites[i].scale.x = 1 + window.app.soundManager.midBass * 1.2;
+				this.meteorites[i].scale.y = 1 + window.app.soundManager.midBass * 1.2;
+				this.meteorites[i].scale.z = 1 + window.app.soundManager.midBass * 1.2;
+			}
 		}
 
 	}
