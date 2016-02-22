@@ -1,6 +1,6 @@
 const Color = require('color');
 
-class Lune extends THREE.Object3D {
+class Moon extends THREE.Object3D {
 
 	constructor ( opt ) {
 
@@ -48,9 +48,10 @@ class Lune extends THREE.Object3D {
 
 	initGui () {
 
-		this.luneGui = window.gui.addFolder('Lune');
+		this.luneGui = window.gui.addFolder('Moon');
 		this.luneGui.add(this, 'radius', 4, 30);
 		this.luneGui.addColor(this, 'color');
+		this.luneGui.open();
 
 	}
 
@@ -81,4 +82,4 @@ class Lune extends THREE.Object3D {
 	
 }
 
-export default Lune;
+export default Moon;

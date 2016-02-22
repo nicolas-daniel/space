@@ -1,6 +1,6 @@
 import Meteorites from './modules/meteorites';
 import Planet from './modules/planet';
-import Lune from './modules/lune';
+import Moon from './modules/moon';
 import SoundManager from './managers/soundManager';
 import GuiManager from './managers/guiManager';
 
@@ -88,11 +88,11 @@ class App {
 		
 		this.meteorites = new Meteorites({ count:100 });
 		this.planet = new Planet({ radius:100 });
-		this.lune = new Lune({ radius:20 });
+		this.moon = new Moon({ radius:20 });
 
 		this.scene.add( this.meteorites );
 		this.scene.add( this.planet );
-		this.scene.add( this.lune );
+		this.scene.add( this.moon );
 
 		// add sound manager
 		this.soundManager = new SoundManager();
@@ -158,7 +158,7 @@ class App {
 		this.soundManager.update();
 		this.planet.update();
 		this.meteorites.update();
-		this.lune.update();
+		this.moon.update();
 
 	}
 
