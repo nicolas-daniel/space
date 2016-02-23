@@ -2,7 +2,6 @@ import Meteorites from './modules/meteorites';
 import Planet from './modules/planet';
 import Moon from './modules/moon';
 import SoundManager from './managers/soundManager';
-import GuiManager from './managers/guiManager';
 
 WAGNER.vertexShadersPath = '/Wagner/vertex-shaders';
 WAGNER.fragmentShadersPath = '/Wagner/fragment-shaders';
@@ -43,8 +42,6 @@ class App {
         this.bloomPass.params.applyZoomBlur = !0;
         this.bloomPass.params.zoomBlurStrength = .3;
 		
-		this.guiManager = new GuiManager();
-
 		// init gui
 		this.wagnerGui = this.gui.addFolder('Wagner');
 		this.wagnerGui.add(this, 'useNoise');
