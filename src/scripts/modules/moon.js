@@ -60,9 +60,9 @@ class Moon extends THREE.Object3D {
 		this.rotation.y += 0.008;
 
 		if (window.app) {
-			this.mesh.scale.x = this.radius / this.opt.radius + window.app.soundManager.bass;
-			this.mesh.scale.y = this.radius / this.opt.radius + window.app.soundManager.bass;
-			this.mesh.scale.z = this.radius / this.opt.radius + window.app.soundManager.bass;
+			this.mesh.scale.x = this.radius / this.opt.radius + window.app.soundManager.voice;
+			this.mesh.scale.y = this.radius / this.opt.radius + window.app.soundManager.voice;
+			this.mesh.scale.z = this.radius / this.opt.radius + window.app.soundManager.voice;
 		}
 
 		// mesh color

@@ -22,28 +22,27 @@ class App {
 		this.wHeight = window.innerHeight;
 		this.useNoise = true;
 		this.useVignette = true;
+		this.useBloom = true;
 		this.autoRotate = true;
 		this.gui = window.gui = new dat.GUI();
 
 		// wagner passes
-		this.zoomBlurPass = new WAGNER.ZoomBlurPass();
 		this.noisePass = new WAGNER.NoisePass();
-		this.multiPassBloomPass = new WAGNER.MultiPassBloomPass();
-		this.fxaaPass = new WAGNER.FXAAPass();
+		this.bloomPass = new WAGNER.MultiPassBloomPass();
 		this.vignettePass = new WAGNER.VignettePass();
-		this.vignette2Pass = new WAGNER.Vignette2Pass();
 
 		// noise pass
 		this.noisePass.params.amount = 0.05;
 		this.noisePass.params.speed = 0.05;
-		
-		// zoom blur pass
-		this.zoomBlurPass.params.strength = 0.02;
-		this.zoomBlurPass.params.applyZoomBlur = 0.02;
 
 		// vignette pass
-		this.vignette2Pass.params.boost = 2;
-		this.vignette2Pass.params.reduction = 4;
+		this.vignettePass.params.amount = 1;
+
+		// bloom pass
+		this.bloomPass.params.strength = .5;
+        this.bloomPass.params.blurAmount = .1;
+        this.bloomPass.params.applyZoomBlur = !0;
+        this.bloomPass.params.zoomBlurStrength = .3;
 		
 		this.guiManager = new GuiManager();
 
@@ -51,6 +50,7 @@ class App {
 		this.wagnerGui = this.gui.addFolder('Wagner');
 		this.wagnerGui.add(this, 'useNoise');
 		this.wagnerGui.add(this, 'useVignette');
+		this.wagnerGui.add(this, 'useBloom');
 		this.wagnerGui.open();
 
 		this.init();
@@ -80,7 +80,7 @@ class App {
 		this.container.appendChild( this.canvas );
 
 		this.composer = new WAGNER.Composer( this.renderer );
-		this.composer.setSize( this.wWidth, this.wHeight ); // or whatever resolution
+		this.composer.setSize( this.wWidth, this.wHeight );
 
 		this.addLights();
 
@@ -137,15 +137,15 @@ class App {
 
 	animate() {
 
+		// update passes
+		this.vignettePass.params.amount = 0.2 + this.soundManager.bass;
+        this.bloomPass.params.zoomBlurStrength = .1 + this.soundManager.drum * 0.3;
+
 		this.composer.reset();
 		this.composer.render( this.scene, this.camera );
 		if (this.useNoise) this.composer.pass( this.noisePass );
 		if (this.useVignette) this.composer.pass( this.vignettePass );
-		
-		// this.composer.pass( this.multiPassBloomPass );
-		// this.composer.pass( this.vignette2Pass );
-		// this.composer.pass( this.fxaaPass );
-		// this.composer.pass( this.zoomBlurPass );
+		if (this.useBloom) this.composer.pass( this.bloomPass );
 		
 		this.composer.toScreen();
 		
