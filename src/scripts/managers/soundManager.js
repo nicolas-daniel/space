@@ -41,7 +41,7 @@ class SoundManager {
 
 		soundcloud({
 			client_id: 'b95f61a90da961736c03f659c03cb0cc',
-			song: 'https://soundcloud.com/yotam-baruchyan/stan-eminem-ft-dido-cover',
+			song: 'https://soundcloud.com/mome-music/mome-aloha-feat-merryn-jeann',
 			dark: false,
 			getFonts: true
 		}, (err, src, data, div) => {
