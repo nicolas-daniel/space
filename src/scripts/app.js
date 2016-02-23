@@ -4,9 +4,8 @@ import Moon from './modules/moon';
 import SoundManager from './managers/soundManager';
 import GuiManager from './managers/guiManager';
 
-WAGNER.vertexShadersPath = '/shaders/vertex-shaders';
-WAGNER.fragmentShadersPath = '/shaders/fragment-shaders';
-WAGNER.assetsPath = '/assets/';
+WAGNER.vertexShadersPath = '/Wagner/vertex-shaders';
+WAGNER.fragmentShadersPath = '/Wagner/fragment-shaders';
 
 class App {
 	
